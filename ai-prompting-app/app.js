@@ -148,6 +148,36 @@ const categoryRecommendations = {
         primary: 'template-based',
         reason: 'Structured templates ensure professional, consistent business documents.',
         alternatives: ['role-based', 'zero-shot']
+    },
+    'communication': {
+        primary: 'zero-shot',
+        reason: 'Direct instructions work best for clear, concise messages and responses.',
+        alternatives: ['template-based', 'role-based']
+    },
+    'research': {
+        primary: 'chain-of-thought',
+        reason: 'Step-by-step research ensures comprehensive coverage and accurate findings.',
+        alternatives: ['template-based', 'zero-shot']
+    },
+    'marketing': {
+        primary: 'few-shot',
+        reason: 'Examples help maintain brand voice and style consistency across campaigns.',
+        alternatives: ['role-based', 'template-based']
+    },
+    'legal': {
+        primary: 'template-based',
+        reason: 'Legal documents require consistent structure and precise formatting.',
+        alternatives: ['few-shot', 'zero-shot']
+    },
+    'support': {
+        primary: 'template-based',
+        reason: 'Help documentation benefits from consistent, structured formats.',
+        alternatives: ['few-shot', 'zero-shot']
+    },
+    'translation': {
+        primary: 'few-shot',
+        reason: 'Examples ensure consistent terminology and style in translations.',
+        alternatives: ['zero-shot', 'role-based']
     }
 };
 
@@ -587,7 +617,13 @@ function getDefaultRole(category) {
         'analysis': 'a data analyst and research expert',
         'creative': 'a creative director at a leading design agency',
         'learning': 'an expert educator and mentor',
-        'business': 'a seasoned business strategist and consultant'
+        'business': 'a seasoned business strategist and consultant',
+        'communication': 'a professional communications specialist',
+        'research': 'a senior research analyst with expertise in thorough investigation',
+        'marketing': 'a marketing director with 10+ years of brand experience',
+        'legal': 'a legal consultant specializing in contract drafting',
+        'support': 'a customer success manager with technical expertise',
+        'translation': 'a professional translator and localization expert'
     };
     return roles[category] || 'an expert in your field';
 }

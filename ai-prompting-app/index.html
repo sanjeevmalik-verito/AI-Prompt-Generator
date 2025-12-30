@@ -151,39 +151,179 @@
                 <!-- Step 1: Category Selection -->
                 <div class="wizard-step active" id="step-1">
                     <h3 class="wizard-title">What kind of task do you want to accomplish?</h3>
+                    <p class="wizard-subtitle">Hover over any category to see examples • Click to select</p>
                     <div class="category-grid">
                         <button class="category-card" data-category="writing">
                             <span class="category-icon">✍️</span>
                             <span class="category-name">Writing</span>
                             <span class="category-desc">Articles, emails, stories</span>
+                            <div class="category-hover-details">
+                                <span class="hover-label">Example tasks:</span>
+                                <ul>
+                                    <li>Blog posts & articles</li>
+                                    <li>Professional emails</li>
+                                    <li>Marketing copy</li>
+                                </ul>
+                                <span class="hover-technique">Best: Role-Based</span>
+                            </div>
                         </button>
                         <button class="category-card" data-category="coding">
                             <span class="category-icon">💻</span>
                             <span class="category-name">Coding</span>
                             <span class="category-desc">Code, debugging, reviews</span>
+                            <div class="category-hover-details">
+                                <span class="hover-label">Example tasks:</span>
+                                <ul>
+                                    <li>Write functions & classes</li>
+                                    <li>Debug existing code</li>
+                                    <li>Code reviews</li>
+                                </ul>
+                                <span class="hover-technique">Best: Chain-of-Thought</span>
+                            </div>
                         </button>
                         <button class="category-card" data-category="analysis">
                             <span class="category-icon">📊</span>
                             <span class="category-name">Analysis</span>
                             <span class="category-desc">Data, research, insights</span>
+                            <div class="category-hover-details">
+                                <span class="hover-label">Example tasks:</span>
+                                <ul>
+                                    <li>Data interpretation</li>
+                                    <li>Market research</li>
+                                    <li>Trend analysis</li>
+                                </ul>
+                                <span class="hover-technique">Best: Chain-of-Thought</span>
+                            </div>
                         </button>
                         <button class="category-card" data-category="creative">
                             <span class="category-icon">🎨</span>
                             <span class="category-name">Creative</span>
                             <span class="category-desc">Ideas, brainstorming</span>
+                            <div class="category-hover-details">
+                                <span class="hover-label">Example tasks:</span>
+                                <ul>
+                                    <li>Brainstorm ideas</li>
+                                    <li>Story concepts</li>
+                                    <li>Design suggestions</li>
+                                </ul>
+                                <span class="hover-technique">Best: Role-Based</span>
+                            </div>
                         </button>
                         <button class="category-card" data-category="learning">
                             <span class="category-icon">📖</span>
                             <span class="category-name">Learning</span>
                             <span class="category-desc">Explanations, tutorials</span>
+                            <div class="category-hover-details">
+                                <span class="hover-label">Example tasks:</span>
+                                <ul>
+                                    <li>Explain concepts</li>
+                                    <li>Create tutorials</li>
+                                    <li>Study guides</li>
+                                </ul>
+                                <span class="hover-technique">Best: Role-Based</span>
+                            </div>
                         </button>
                         <button class="category-card" data-category="business">
                             <span class="category-icon">💼</span>
                             <span class="category-name">Business</span>
                             <span class="category-desc">Planning, strategy</span>
+                            <div class="category-hover-details">
+                                <span class="hover-label">Example tasks:</span>
+                                <ul>
+                                    <li>Business plans</li>
+                                    <li>SWOT analysis</li>
+                                    <li>Strategy docs</li>
+                                </ul>
+                                <span class="hover-technique">Best: Template-Based</span>
+                            </div>
+                        </button>
+                        <button class="category-card" data-category="communication">
+                            <span class="category-icon">💬</span>
+                            <span class="category-name">Communication</span>
+                            <span class="category-desc">Messages, responses</span>
+                            <div class="category-hover-details">
+                                <span class="hover-label">Example tasks:</span>
+                                <ul>
+                                    <li>Customer replies</li>
+                                    <li>Meeting summaries</li>
+                                    <li>Announcements</li>
+                                </ul>
+                                <span class="hover-technique">Best: Zero-Shot</span>
+                            </div>
+                        </button>
+                        <button class="category-card" data-category="research">
+                            <span class="category-icon">🔬</span>
+                            <span class="category-name">Research</span>
+                            <span class="category-desc">Deep dives, summaries</span>
+                            <div class="category-hover-details">
+                                <span class="hover-label">Example tasks:</span>
+                                <ul>
+                                    <li>Literature reviews</li>
+                                    <li>Topic summaries</li>
+                                    <li>Fact-checking</li>
+                                </ul>
+                                <span class="hover-technique">Best: Chain-of-Thought</span>
+                            </div>
+                        </button>
+                        <button class="category-card" data-category="marketing">
+                            <span class="category-icon">📣</span>
+                            <span class="category-name">Marketing</span>
+                            <span class="category-desc">Ads, social, campaigns</span>
+                            <div class="category-hover-details">
+                                <span class="hover-label">Example tasks:</span>
+                                <ul>
+                                    <li>Ad copy & headlines</li>
+                                    <li>Social media posts</li>
+                                    <li>Email campaigns</li>
+                                </ul>
+                                <span class="hover-technique">Best: Few-Shot</span>
+                            </div>
+                        </button>
+                        <button class="category-card" data-category="legal">
+                            <span class="category-icon">⚖️</span>
+                            <span class="category-name">Legal</span>
+                            <span class="category-desc">Contracts, policies</span>
+                            <div class="category-hover-details">
+                                <span class="hover-label">Example tasks:</span>
+                                <ul>
+                                    <li>Contract drafts</li>
+                                    <li>Policy documents</li>
+                                    <li>Terms of service</li>
+                                </ul>
+                                <span class="hover-technique">Best: Template-Based</span>
+                            </div>
+                        </button>
+                        <button class="category-card" data-category="support">
+                            <span class="category-icon">🎧</span>
+                            <span class="category-name">Support</span>
+                            <span class="category-desc">Help docs, FAQs</span>
+                            <div class="category-hover-details">
+                                <span class="hover-label">Example tasks:</span>
+                                <ul>
+                                    <li>FAQ creation</li>
+                                    <li>Troubleshooting guides</li>
+                                    <li>Knowledge base</li>
+                                </ul>
+                                <span class="hover-technique">Best: Template-Based</span>
+                            </div>
+                        </button>
+                        <button class="category-card" data-category="translation">
+                            <span class="category-icon">🌐</span>
+                            <span class="category-name">Translation</span>
+                            <span class="category-desc">Languages, localization</span>
+                            <div class="category-hover-details">
+                                <span class="hover-label">Example tasks:</span>
+                                <ul>
+                                    <li>Text translation</li>
+                                    <li>Localization</li>
+                                    <li>Cultural adaptation</li>
+                                </ul>
+                                <span class="hover-technique">Best: Few-Shot</span>
+                            </div>
                         </button>
                     </div>
                 </div>
+
 
                 <!-- Step 2: Technique Recommendation -->
                 <div class="wizard-step" id="step-2">

@@ -1,38 +1,50 @@
 /* ========================================
-   CSS Custom Properties & Design System
+   Verito Design System - AI Prompting App
    ======================================== */
 
 :root {
-    /* Colors */
-    --color-bg: #0a0a0f;
-    --color-bg-secondary: #12121a;
-    --color-bg-card: #1a1a25;
-    --color-bg-hover: #22222f;
-    
-    --color-text: #ffffff;
-    --color-text-secondary: #a0a0b0;
-    --color-text-muted: #6a6a7a;
-    
-    --color-primary: #7c3aed;
-    --color-primary-light: #8b5cf6;
-    --color-primary-dark: #6d28d9;
-    
-    --color-accent: #06b6d4;
-    --color-accent-light: #22d3ee;
-    
-    --color-success: #10b981;
-    --color-warning: #f59e0b;
-    
-    --gradient-primary: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
-    --gradient-subtle: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
-    --gradient-card: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
-    
+    /* Verito Brand Colors */
+    --color-primary: #3CB55A;
+    --color-primary-dark: #0C8B4F;
+    --color-primary-light: #4DC96A;
+
+    --color-accent: #A020F0;
+    --color-accent-light: #B84DFF;
+
+    --color-teal: #123B4A;
+    --color-teal-light: #1A4D5E;
+    --color-teal-dark: #0D2A35;
+
+    /* Backgrounds */
+    --color-bg: #F8FAFB;
+    --color-bg-dark: #123B4A;
+    --color-bg-card: #FFFFFF;
+    --color-bg-card-hover: #F0F7F4;
+
+    /* Text Colors */
+    --color-text: #1A2B33;
+    --color-text-light: #FFFFFF;
+    --color-text-secondary: #5A6B73;
+    --color-text-muted: #8A9BA3;
+
+    /* Functional Colors */
+    --color-success: #3CB55A;
+    --color-warning: #F5A623;
+    --color-error: #E74C3C;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #3CB55A 0%, #0C8B4F 100%);
+    --gradient-accent: linear-gradient(135deg, #A020F0 0%, #7B16B8 100%);
+    --gradient-teal: linear-gradient(180deg, #123B4A 0%, #0D2A35 100%);
+    --gradient-hero: linear-gradient(135deg, #123B4A 0%, #1A4D5E 50%, #123B4A 100%);
+
     /* Shadows */
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
-    --shadow-glow: 0 0 30px rgba(124, 58, 237, 0.3);
-    
+    --shadow-sm: 0 2px 8px rgba(18, 59, 74, 0.08);
+    --shadow-md: 0 4px 16px rgba(18, 59, 74, 0.12);
+    --shadow-lg: 0 8px 32px rgba(18, 59, 74, 0.16);
+    --shadow-green: 0 4px 20px rgba(60, 181, 90, 0.35);
+    --shadow-purple: 0 4px 20px rgba(160, 32, 240, 0.3);
+
     /* Spacing */
     --space-xs: 0.25rem;
     --space-sm: 0.5rem;
@@ -41,19 +53,20 @@
     --space-xl: 2rem;
     --space-2xl: 3rem;
     --space-3xl: 4rem;
-    
-    /* Border Radius */
-    --radius-sm: 6px;
-    --radius-md: 10px;
+    --space-4xl: 5rem;
+
+    /* Border Radius - Verito uses generous rounding */
+    --radius-sm: 8px;
+    --radius-md: 12px;
     --radius-lg: 16px;
     --radius-xl: 24px;
     --radius-full: 9999px;
-    
+
     /* Transitions */
     --transition-fast: 150ms ease;
-    --transition-base: 250ms ease;
-    --transition-slow: 400ms ease;
-    
+    --transition-base: 300ms ease;
+    --transition-slow: 500ms ease;
+
     /* Typography */
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-size-xs: 0.75rem;
@@ -64,14 +77,16 @@
     --font-size-2xl: 1.5rem;
     --font-size-3xl: 2rem;
     --font-size-4xl: 2.5rem;
-    --font-size-5xl: 3.5rem;
+    --font-size-5xl: 3.25rem;
 }
 
 /* ========================================
    Base Styles
    ======================================== */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -84,7 +99,7 @@ html {
 body {
     font-family: var(--font-sans);
     font-size: var(--font-size-base);
-    line-height: 1.6;
+    line-height: 1.7;
     color: var(--color-text);
     background: var(--color-bg);
     min-height: 100vh;
@@ -100,40 +115,48 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 var(--space-lg);
 }
 
 .main-content {
     flex: 1;
-    padding: var(--space-2xl) 0;
 }
 
 .section {
     display: none;
-    animation: fadeIn 0.4s ease;
+    animation: fadeSlideIn 0.5s ease;
 }
 
 .section.active {
     display: block;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ========================================
-   Header & Navigation
+   Header & Navigation - Verito Style
    ======================================== */
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--space-lg) 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: var(--space-lg) var(--space-2xl);
+    background: var(--color-bg-card);
+    border-bottom: 1px solid rgba(18, 59, 74, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
 }
 
 .logo {
@@ -142,56 +165,100 @@ body {
     gap: var(--space-sm);
     font-size: var(--font-size-xl);
     font-weight: 700;
+    color: var(--color-teal);
 }
 
 .logo-icon {
-    font-size: 1.5em;
+    font-size: 1.75em;
+    filter: drop-shadow(0 2px 4px rgba(60, 181, 90, 0.3));
+}
+
+.logo-text {
+    background: var(--gradient-teal);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .nav {
     display: flex;
     gap: var(--space-xs);
-    background: var(--color-bg-secondary);
-    padding: var(--space-xs);
+    background: var(--color-bg);
+    padding: 6px;
     border-radius: var(--radius-full);
+    border: 1px solid rgba(18, 59, 74, 0.1);
 }
 
 .nav-btn {
     background: transparent;
     border: none;
     color: var(--color-text-secondary);
-    padding: var(--space-sm) var(--space-lg);
+    padding: var(--space-sm) var(--space-xl);
     border-radius: var(--radius-full);
     font-size: var(--font-size-sm);
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: all var(--transition-base);
 }
 
 .nav-btn:hover {
-    color: var(--color-text);
-    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-teal);
+    background: rgba(18, 59, 74, 0.05);
 }
 
 .nav-btn.active {
-    background: var(--color-primary);
-    color: var(--color-text);
+    background: var(--gradient-primary);
+    color: var(--color-text-light);
+    box-shadow: var(--shadow-green);
 }
 
 /* ========================================
-   Hero Section
+   Hero Section - Verito Dark Teal Style
    ======================================== */
 
 .hero {
+    background: var(--gradient-hero);
+    padding: var(--space-4xl) var(--space-2xl);
     text-align: center;
-    padding: var(--space-3xl) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 70%, rgba(60, 181, 90, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 30%, rgba(160, 32, 240, 0.08) 0%, transparent 50%);
+    animation: floatBg 20s ease-in-out infinite;
+}
+
+@keyframes floatBg {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(-5%, 5%);
+    }
+}
+
+.hero>* {
+    position: relative;
+    z-index: 1;
 }
 
 .hero-title {
     font-size: var(--font-size-5xl);
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.15;
     margin-bottom: var(--space-lg);
+    color: var(--color-text-light);
 }
 
 .gradient-text {
@@ -203,9 +270,10 @@ body {
 
 .hero-subtitle {
     font-size: var(--font-size-xl);
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.8);
     max-width: 600px;
-    margin: 0 auto var(--space-xl);
+    margin: 0 auto var(--space-2xl);
+    line-height: 1.6;
 }
 
 .hero-actions {
@@ -216,43 +284,57 @@ body {
 }
 
 /* ========================================
-   Buttons
+   Buttons - Verito Pill Style
    ======================================== */
 
 .btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-sm);
-    padding: var(--space-md) var(--space-xl);
+    padding: var(--space-md) var(--space-2xl);
     border: none;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-full);
     font-size: var(--font-size-base);
     font-weight: 600;
     cursor: pointer;
     transition: all var(--transition-base);
     text-decoration: none;
+    white-space: nowrap;
 }
 
 .btn-primary {
     background: var(--gradient-primary);
-    color: var(--color-text);
-    box-shadow: var(--shadow-glow);
+    color: var(--color-text-light);
+    box-shadow: var(--shadow-green);
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 40px rgba(124, 58, 237, 0.5);
+    transform: scale(1.03);
+    box-shadow: 0 6px 28px rgba(60, 181, 90, 0.45);
 }
 
 .btn-secondary {
-    background: var(--color-bg-card);
-    color: var(--color-text);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--gradient-accent);
+    color: var(--color-text-light);
+    box-shadow: var(--shadow-purple);
 }
 
 .btn-secondary:hover {
-    background: var(--color-bg-hover);
-    border-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.03);
+    box-shadow: 0 6px 28px rgba(160, 32, 240, 0.4);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--color-text-light);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.btn-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.03);
 }
 
 .btn-icon {
@@ -264,44 +346,45 @@ body {
 }
 
 /* ========================================
-   Stats Grid
+   Stats Grid - White Cards on Teal
    ======================================== */
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: var(--space-lg);
-    margin-top: var(--space-3xl);
+    max-width: 800px;
+    margin: var(--space-3xl) auto 0;
+    padding: 0 var(--space-lg);
 }
 
 .stat-card {
-    background: var(--gradient-card), var(--color-bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
+    background: var(--color-bg-card);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl) var(--space-lg);
     text-align: center;
+    box-shadow: var(--shadow-md);
     transition: all var(--transition-base);
+    border: 1px solid rgba(18, 59, 74, 0.05);
 }
 
 .stat-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(124, 58, 237, 0.3);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: var(--shadow-lg);
 }
 
 .stat-number {
     display: block;
     font-size: var(--font-size-4xl);
     font-weight: 700;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--color-primary);
+    margin-bottom: var(--space-xs);
 }
 
 .stat-label {
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
+    font-weight: 500;
 }
 
 /* ========================================
@@ -313,85 +396,102 @@ body {
     font-weight: 700;
     text-align: center;
     margin-bottom: var(--space-sm);
+    color: var(--color-teal);
 }
 
 .section-description {
     text-align: center;
     color: var(--color-text-secondary);
     margin-bottom: var(--space-2xl);
+    font-size: var(--font-size-lg);
 }
 
 /* ========================================
-   Technique Cards (Learn Section)
+   Learn Section Container
+   ======================================== */
+
+#learn {
+    padding: var(--space-3xl) var(--space-2xl);
+    background: var(--color-bg);
+}
+
+/* ========================================
+   Technique Cards - Verito Card Style
    ======================================== */
 
 .techniques-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: var(--space-lg);
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 .technique-card {
-    background: var(--gradient-card), var(--color-bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-lg);
+    background: var(--color-bg-card);
+    border: 1px solid rgba(18, 59, 74, 0.08);
+    border-radius: var(--radius-xl);
     padding: var(--space-xl);
     cursor: pointer;
     transition: all var(--transition-base);
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
 }
 
 .technique-card::before {
     content: '';
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
     background: var(--gradient-primary);
     opacity: 0;
     transition: opacity var(--transition-base);
 }
 
 .technique-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(124, 58, 237, 0.4);
-    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primary);
 }
 
 .technique-card:hover::before {
-    opacity: 0.05;
-}
-
-.technique-card > * {
-    position: relative;
-    z-index: 1;
+    opacity: 1;
 }
 
 .technique-icon {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-bottom: var(--space-md);
+    display: inline-block;
 }
 
 .technique-name {
-    font-size: var(--font-size-lg);
-    font-weight: 600;
+    font-size: var(--font-size-xl);
+    font-weight: 700;
     margin-bottom: var(--space-sm);
+    color: var(--color-teal);
 }
 
 .technique-brief {
     color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     margin-bottom: var(--space-md);
+    line-height: 1.6;
 }
 
 .technique-tag {
     display: inline-block;
-    background: var(--gradient-subtle);
-    border: 1px solid rgba(124, 58, 237, 0.3);
-    color: var(--color-primary-light);
-    padding: var(--space-xs) var(--space-sm);
+    background: linear-gradient(135deg, rgba(60, 181, 90, 0.1) 0%, rgba(12, 139, 79, 0.1) 100%);
+    border: 1px solid rgba(60, 181, 90, 0.3);
+    color: var(--color-primary-dark);
+    padding: var(--space-xs) var(--space-md);
     border-radius: var(--radius-full);
     font-size: var(--font-size-xs);
-    font-weight: 500;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* ========================================
@@ -402,12 +502,12 @@ body {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(8px);
-    z-index: 100;
+    background: rgba(18, 59, 74, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 1000;
     padding: var(--space-lg);
     overflow-y: auto;
-    animation: fadeIn 0.3s ease;
+    animation: fadeSlideIn 0.3s ease;
 }
 
 .technique-detail.active {
@@ -418,41 +518,49 @@ body {
 
 .close-btn {
     position: absolute;
-    top: var(--space-lg);
-    right: var(--space-lg);
+    top: var(--space-xl);
+    right: var(--space-xl);
     background: var(--color-bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--color-text);
-    width: 40px;
-    height: 40px;
+    border: none;
+    color: var(--color-teal);
+    width: 48px;
+    height: 48px;
     border-radius: var(--radius-full);
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-2xl);
     cursor: pointer;
     transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .close-btn:hover {
-    background: var(--color-bg-hover);
-    transform: rotate(90deg);
+    background: var(--color-primary);
+    color: var(--color-text-light);
+    transform: rotate(90deg) scale(1.1);
 }
 
 .detail-content {
-    background: var(--color-bg-secondary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-card);
     border-radius: var(--radius-xl);
     padding: var(--space-2xl);
-    max-width: 600px;
+    max-width: 650px;
     width: 100%;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(18, 59, 74, 0.1);
 }
 
 .detail-content h3 {
     font-size: var(--font-size-2xl);
     margin-bottom: var(--space-md);
+    color: var(--color-teal);
 }
 
-.detail-content > p {
+.detail-content>p {
     color: var(--color-text-secondary);
     margin-bottom: var(--space-xl);
+    line-height: 1.7;
 }
 
 .detail-section {
@@ -460,26 +568,43 @@ body {
 }
 
 .detail-section h4 {
-    color: var(--color-primary-light);
+    color: var(--color-primary);
     font-size: var(--font-size-sm);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
     margin-bottom: var(--space-sm);
+    font-weight: 700;
+}
+
+.detail-section p {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
 }
 
 .detail-section pre {
     background: var(--color-bg);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-md);
+    border: 1px solid rgba(18, 59, 74, 0.1);
+    border-radius: var(--radius-lg);
     padding: var(--space-lg);
     overflow-x: auto;
     font-size: var(--font-size-sm);
-    line-height: 1.7;
+    line-height: 1.8;
     white-space: pre-wrap;
+    color: var(--color-text);
 }
 
 /* ========================================
-   Step Indicator
+   Generate Section Container
+   ======================================== */
+
+#generate {
+    padding: var(--space-3xl) var(--space-2xl);
+    background: var(--color-bg);
+    min-height: 80vh;
+}
+
+/* ========================================
+   Step Indicator - Verito Green Progress
    ======================================== */
 
 .step-indicator {
@@ -487,8 +612,11 @@ body {
     align-items: center;
     justify-content: center;
     gap: var(--space-sm);
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--space-3xl);
     flex-wrap: wrap;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .step {
@@ -508,43 +636,58 @@ body {
 }
 
 .step-number {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--color-bg-card);
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(18, 59, 74, 0.15);
     border-radius: var(--radius-full);
     font-size: var(--font-size-sm);
-    font-weight: 600;
+    font-weight: 700;
+    color: var(--color-text-secondary);
     transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
 }
 
 .step.active .step-number {
     background: var(--gradient-primary);
     border-color: transparent;
+    color: var(--color-text-light);
+    box-shadow: var(--shadow-green);
+    transform: scale(1.1);
 }
 
 .step.completed .step-number {
-    background: var(--color-success);
+    background: var(--color-primary);
     border-color: transparent;
+    color: var(--color-text-light);
+}
+
+.step.completed .step-number::after {
+    content: '✓';
 }
 
 .step-label {
     font-size: var(--font-size-sm);
-    font-weight: 500;
-    color: var(--color-text-secondary);
+    font-weight: 600;
+    color: var(--color-text-muted);
 }
 
 .step.active .step-label {
-    color: var(--color-text);
+    color: var(--color-teal);
+}
+
+.step.completed .step-label {
+    color: var(--color-primary-dark);
 }
 
 .step-line {
-    width: 40px;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.1);
+    width: 50px;
+    height: 3px;
+    background: rgba(18, 59, 74, 0.1);
+    border-radius: var(--radius-full);
 }
 
 /* ========================================
@@ -553,7 +696,9 @@ body {
 
 .wizard-step {
     display: none;
-    animation: fadeIn 0.4s ease;
+    animation: fadeSlideIn 0.4s ease;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .wizard-step.active {
@@ -561,9 +706,11 @@ body {
 }
 
 .wizard-title {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-2xl);
     text-align: center;
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+    color: var(--color-teal);
+    font-weight: 700;
 }
 
 .wizard-nav {
@@ -574,13 +721,23 @@ body {
 }
 
 /* ========================================
-   Category Cards
+   Category Cards - Enhanced Interactive Style
    ======================================== */
 
 .category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: var(--space-md);
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.wizard-subtitle {
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin-top: calc(-1 * var(--space-lg));
+    margin-bottom: var(--space-xl);
 }
 
 .category-card {
@@ -588,50 +745,179 @@ body {
     flex-direction: column;
     align-items: center;
     gap: var(--space-sm);
-    background: var(--gradient-card), var(--color-bg-card);
-    border: 2px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
+    background: var(--color-bg-card);
+    border: 2px solid rgba(18, 59, 74, 0.08);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl) var(--space-lg);
     cursor: pointer;
     transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    min-height: 160px;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity var(--transition-base);
 }
 
 .category-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(124, 58, 237, 0.4);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-8px) scale(1.03);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-lg), 0 0 20px rgba(60, 181, 90, 0.15);
+}
+
+.category-card:hover::before {
+    opacity: 1;
 }
 
 .category-card.selected {
     border-color: var(--color-primary);
-    background: var(--gradient-subtle);
-    box-shadow: var(--shadow-glow);
+    background: linear-gradient(135deg, rgba(60, 181, 90, 0.1) 0%, rgba(12, 139, 79, 0.05) 100%);
+    box-shadow: var(--shadow-green);
+    transform: scale(1.03);
+}
+
+.category-card.selected::before {
+    opacity: 1;
 }
 
 .category-icon {
-    font-size: 2rem;
+    font-size: 2.75rem;
+    margin-bottom: var(--space-xs);
+    transition: transform var(--transition-base);
+}
+
+.category-card:hover .category-icon {
+    transform: scale(1.15);
 }
 
 .category-name {
-    font-weight: 600;
+    font-weight: 700;
+    color: var(--color-teal);
+    font-size: var(--font-size-lg);
+    transition: color var(--transition-base);
+}
+
+.category-card:hover .category-name {
+    color: var(--color-primary-dark);
 }
 
 .category-desc {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     color: var(--color-text-muted);
     text-align: center;
+    line-height: 1.4;
 }
 
+/* Hover Details Panel */
+.category-hover-details {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, rgba(18, 59, 74, 0.97) 0%, rgba(13, 42, 53, 0.99) 100%);
+    padding: var(--space-md) var(--space-lg);
+    transform: translateY(100%);
+    transition: transform var(--transition-base);
+    text-align: left;
+    border-radius: 0 0 calc(var(--radius-xl) - 2px) calc(var(--radius-xl) - 2px);
+}
+
+.category-card:hover .category-hover-details {
+    transform: translateY(0);
+}
+
+.hover-label {
+    display: block;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--space-xs);
+}
+
+.category-hover-details ul {
+    list-style: none;
+    margin: 0 0 var(--space-sm) 0;
+    padding: 0;
+}
+
+.category-hover-details li {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.9);
+    padding: 2px 0;
+    padding-left: var(--space-md);
+    position: relative;
+}
+
+.category-hover-details li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-size: var(--font-size-xs);
+}
+
+.hover-technique {
+    display: inline-block;
+    background: var(--gradient-primary);
+    color: white;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    margin-top: var(--space-xs);
+}
+
+/* Responsive Grid for Categories */
+@media (max-width: 1000px) {
+    .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+    }
+
+    .category-card {
+        min-height: 140px;
+        padding: var(--space-lg) var(--space-md);
+    }
+
+    .category-hover-details {
+        position: static;
+        transform: none;
+        background: transparent;
+        padding: var(--space-sm) 0 0 0;
+        display: none;
+    }
+}
+
+
 /* ========================================
-   Recommendation Box
+   Recommendation Box - Verito Highlight
    ======================================== */
 
 .recommendation-box {
-    background: var(--gradient-subtle);
-    border: 1px solid rgba(124, 58, 237, 0.3);
-    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, rgba(60, 181, 90, 0.08) 0%, rgba(12, 139, 79, 0.04) 100%);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius-xl);
     padding: var(--space-xl);
     margin-bottom: var(--space-xl);
+    box-shadow: var(--shadow-green);
 }
 
 .recommended-technique {
@@ -641,22 +927,29 @@ body {
 }
 
 .rec-icon {
-    font-size: 3rem;
+    font-size: 3.5rem;
+    filter: drop-shadow(0 4px 8px rgba(60, 181, 90, 0.2));
 }
 
 .rec-info h4 {
     font-size: var(--font-size-xl);
     margin-bottom: var(--space-xs);
+    color: var(--color-teal);
+    font-weight: 700;
 }
 
 .rec-info p {
     color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
 }
 
 .rec-description {
     margin-top: var(--space-lg);
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
+    line-height: 1.7;
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(60, 181, 90, 0.2);
 }
 
 /* ========================================
@@ -665,12 +958,17 @@ body {
 
 .alt-techniques {
     text-align: center;
+    padding: var(--space-xl);
+    background: var(--color-bg-card);
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(18, 59, 74, 0.08);
 }
 
 .alt-label {
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
     margin-bottom: var(--space-md);
+    font-weight: 500;
 }
 
 .alt-buttons {
@@ -681,65 +979,80 @@ body {
 }
 
 .alt-btn {
-    background: var(--color-bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg);
+    border: 2px solid rgba(18, 59, 74, 0.12);
     color: var(--color-text-secondary);
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-sm) var(--space-lg);
     border-radius: var(--radius-full);
     font-size: var(--font-size-sm);
+    font-weight: 600;
     cursor: pointer;
     transition: all var(--transition-base);
 }
 
 .alt-btn:hover {
-    border-color: rgba(124, 58, 237, 0.4);
-    color: var(--color-text);
+    border-color: var(--color-primary);
+    color: var(--color-primary-dark);
+    background: rgba(60, 181, 90, 0.05);
 }
 
 .alt-btn.selected {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-text);
+    background: var(--gradient-primary);
+    border-color: transparent;
+    color: var(--color-text-light);
+    box-shadow: var(--shadow-green);
 }
 
 /* ========================================
-   Form Styles
+   Form Styles - Clean Verito Inputs
    ======================================== */
 
 .prompt-form {
-    max-width: 600px;
+    max-width: 650px;
     margin: 0 auto;
+    background: var(--color-bg-card);
+    padding: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(18, 59, 74, 0.08);
 }
 
 .form-group {
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-xl);
 }
 
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-lg);
+    gap: var(--space-xl);
 }
 
 .form-group label {
     display: block;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: var(--space-sm);
-    color: var(--color-text-secondary);
+    color: var(--color-teal);
+    font-size: var(--font-size-sm);
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
     width: 100%;
-    background: var(--color-bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg);
+    border: 2px solid rgba(18, 59, 74, 0.12);
     border-radius: var(--radius-md);
-    padding: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
     color: var(--color-text);
     font-family: var(--font-sans);
     font-size: var(--font-size-base);
     transition: all var(--transition-base);
+}
+
+.form-group input:hover,
+.form-group textarea:hover,
+.form-group select:hover {
+    border-color: rgba(18, 59, 74, 0.25);
 }
 
 .form-group input:focus,
@@ -747,7 +1060,8 @@ body {
 .form-group select:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+    box-shadow: 0 0 0 4px rgba(60, 181, 90, 0.15);
+    background: var(--color-bg-card);
 }
 
 .form-group input::placeholder,
@@ -758,68 +1072,85 @@ body {
 .form-group select {
     cursor: pointer;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23a0a0b0' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%235A6B73' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 40px;
+    background-position: right 16px center;
+    padding-right: 48px;
 }
 
 .form-group select option {
-    background: var(--color-bg-secondary);
+    background: var(--color-bg-card);
     color: var(--color-text);
+    padding: var(--space-md);
 }
 
 /* ========================================
-   Result Box
+   Result Box - Success State
    ======================================== */
 
 .result-box {
     background: var(--color-bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius-xl);
     overflow: hidden;
     margin-bottom: var(--space-xl);
+    box-shadow: var(--shadow-md);
 }
 
 .result-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--space-md) var(--space-lg);
-    background: rgba(255, 255, 255, 0.02);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: var(--space-lg) var(--space-xl);
+    background: linear-gradient(135deg, rgba(60, 181, 90, 0.08) 0%, rgba(12, 139, 79, 0.04) 100%);
+    border-bottom: 1px solid rgba(60, 181, 90, 0.2);
 }
 
 .result-technique {
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: 600;
+    color: var(--color-primary-dark);
+    font-weight: 700;
+    font-size: var(--font-size-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.result-technique::before {
+    content: '✓';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--color-primary);
+    color: white;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
 }
 
 .copy-btn {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--color-text-secondary);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
+    background: var(--gradient-primary);
+    border: none;
+    color: var(--color-text-light);
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-full);
     font-size: var(--font-size-sm);
+    font-weight: 600;
     cursor: pointer;
     transition: all var(--transition-base);
+    box-shadow: var(--shadow-green);
 }
 
 .copy-btn:hover {
-    border-color: var(--color-success);
-    color: var(--color-success);
+    transform: scale(1.05);
+    box-shadow: 0 6px 24px rgba(60, 181, 90, 0.4);
 }
 
 .copy-btn.copied {
-    border-color: var(--color-success);
-    color: var(--color-success);
+    background: var(--color-primary);
 }
 
 .result-prompt {
@@ -827,25 +1158,30 @@ body {
     margin: 0;
     white-space: pre-wrap;
     word-wrap: break-word;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     line-height: 1.8;
     max-height: 400px;
     overflow-y: auto;
+    color: var(--color-text);
+    background: var(--color-bg);
+    border-radius: 0;
 }
 
 /* ========================================
-   Result Tips
+   Result Tips - Verito Info Box
    ======================================== */
 
 .result-tips {
-    background: var(--gradient-subtle);
-    border: 1px solid rgba(124, 58, 237, 0.2);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg);
+    background: linear-gradient(135deg, rgba(160, 32, 240, 0.06) 0%, rgba(123, 22, 184, 0.03) 100%);
+    border: 1px solid rgba(160, 32, 240, 0.2);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
 }
 
 .result-tips h4 {
     margin-bottom: var(--space-md);
+    color: var(--color-accent);
+    font-weight: 700;
 }
 
 .result-tips ul {
@@ -857,28 +1193,31 @@ body {
 
 .result-tips li {
     color: var(--color-text-secondary);
-    font-size: var(--font-size-sm);
-    padding-left: var(--space-lg);
+    font-size: var(--font-size-base);
+    padding-left: var(--space-xl);
     position: relative;
+    line-height: 1.6;
 }
 
 .result-tips li::before {
     content: '✓';
     position: absolute;
     left: 0;
-    color: var(--color-success);
+    color: var(--color-primary);
+    font-weight: bold;
 }
 
 /* ========================================
-   Footer
+   Footer - Clean Verito Style
    ======================================== */
 
 .footer {
     text-align: center;
-    padding: var(--space-xl) 0;
+    padding: var(--space-2xl);
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--color-bg-card);
+    border-top: 1px solid rgba(18, 59, 74, 0.08);
 }
 
 /* ========================================
@@ -887,66 +1226,102 @@ body {
 
 @media (max-width: 768px) {
     :root {
-        --font-size-5xl: 2.5rem;
-        --font-size-4xl: 2rem;
+        --font-size-5xl: 2.25rem;
+        --font-size-4xl: 1.75rem;
         --font-size-3xl: 1.5rem;
     }
-    
+
     .header {
         flex-direction: column;
         gap: var(--space-md);
+        padding: var(--space-md);
     }
-    
+
     .nav {
         width: 100%;
         justify-content: center;
     }
-    
+
+    .hero {
+        padding: var(--space-2xl) var(--space-md);
+    }
+
     .hero-actions {
         flex-direction: column;
         align-items: stretch;
+        padding: 0 var(--space-lg);
     }
-    
+
     .btn {
         justify-content: center;
     }
-    
+
     .form-row {
         grid-template-columns: 1fr;
     }
-    
+
     .step-label {
         display: none;
     }
-    
+
     .wizard-nav {
         flex-direction: column;
+        padding: 0 var(--space-md);
     }
-    
+
     .wizard-nav .btn {
         width: 100%;
+    }
+
+    .prompt-form {
+        padding: var(--space-lg);
+    }
+
+    .recommended-technique {
+        flex-direction: column;
+        text-align: center;
     }
 }
 
 @media (max-width: 480px) {
-    .app-container {
-        padding: 0 var(--space-md);
+
+    #learn,
+    #generate {
+        padding: var(--space-xl) var(--space-md);
     }
-    
+
     .category-grid {
         grid-template-columns: 1fr 1fr;
+        gap: var(--space-md);
     }
-    
+
+    .category-card {
+        padding: var(--space-lg) var(--space-md);
+    }
+
     .techniques-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .alt-buttons {
         flex-direction: column;
     }
-    
+
     .alt-btn {
         width: 100%;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-sm);
+    }
+
+    .stat-card {
+        padding: var(--space-md);
+    }
+
+    .stat-number {
+        font-size: var(--font-size-2xl);
     }
 }
 
@@ -964,12 +1339,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--color-bg-hover);
+    background: var(--color-teal-light);
     border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-text-muted);
+    background: var(--color-teal);
 }
 
 /* ========================================
@@ -977,6 +1352,21 @@ body {
    ======================================== */
 
 ::selection {
-    background: rgba(124, 58, 237, 0.4);
-    color: var(--color-text);
+    background: rgba(60, 181, 90, 0.3);
+    color: var(--color-teal);
+}
+
+/* ========================================
+   Focus Visible - Accessibility
+   ======================================== */
+
+:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+button:focus-visible,
+.btn:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
 }
