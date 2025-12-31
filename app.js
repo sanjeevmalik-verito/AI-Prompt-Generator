@@ -567,7 +567,7 @@ function displayResult(promptText, techniqueId, isAiOptimized) {
 
 let aiEngine = null;
 let isAiInitializing = false;
-const MODEL_ID = "DeepSeek-R1-Distill-Llama-8B";
+const MODEL_ID = "DeepSeek-R1-Distill-Llama-8B-q4f16_1-MLC";
 
 async function initAIEngine() {
     if (aiEngine) return aiEngine;
