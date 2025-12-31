@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div class="app-container">
         <!-- Header -->
@@ -64,7 +66,7 @@
             <section id="learn" class="section">
                 <h2 class="section-title">Prompting Techniques</h2>
                 <p class="section-description">Click on any technique to learn more about it</p>
-                
+
                 <div class="techniques-grid">
                     <div class="technique-card" data-technique="zero-shot">
                         <div class="technique-icon">🎯</div>
@@ -72,28 +74,28 @@
                         <p class="technique-brief">Direct instructions without examples</p>
                         <span class="technique-tag">Simple Tasks</span>
                     </div>
-                    
+
                     <div class="technique-card" data-technique="few-shot">
                         <div class="technique-icon">📚</div>
                         <h3 class="technique-name">Few-Shot</h3>
                         <p class="technique-brief">Learning from provided examples</p>
                         <span class="technique-tag">Complex Tasks</span>
                     </div>
-                    
+
                     <div class="technique-card" data-technique="chain-of-thought">
                         <div class="technique-icon">🔗</div>
                         <h3 class="technique-name">Chain-of-Thought</h3>
                         <p class="technique-brief">Step-by-step reasoning process</p>
                         <span class="technique-tag">Problem Solving</span>
                     </div>
-                    
+
                     <div class="technique-card" data-technique="role-based">
                         <div class="technique-icon">🎭</div>
                         <h3 class="technique-name">Role-Based</h3>
                         <p class="technique-brief">Assign persona or expertise</p>
                         <span class="technique-tag">Creative Tasks</span>
                     </div>
-                    
+
                     <div class="technique-card" data-technique="template-based">
                         <div class="technique-icon">📋</div>
                         <h3 class="technique-name">Template-Based</h3>
@@ -124,7 +126,7 @@
             <!-- Generate Section -->
             <section id="generate" class="section">
                 <h2 class="section-title">Generate Your Prompt</h2>
-                
+
                 <!-- Step Indicator -->
                 <div class="step-indicator">
                     <div class="step active" data-step="1">
@@ -338,7 +340,7 @@
                         </div>
                         <p class="rec-description" id="rec-description"></p>
                     </div>
-                    
+
                     <div class="alt-techniques">
                         <p class="alt-label">Or choose another technique:</p>
                         <div class="alt-buttons">
@@ -349,7 +351,7 @@
                             <button class="alt-btn" data-technique="template-based">Template-Based</button>
                         </div>
                     </div>
-                    
+
                     <div class="wizard-nav">
                         <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
                         <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
@@ -359,13 +361,14 @@
                 <!-- Step 3: Details Form -->
                 <div class="wizard-step" id="step-3">
                     <h3 class="wizard-title">Customize Your Prompt</h3>
-                    
+
                     <form class="prompt-form" id="prompt-form">
                         <div class="form-group">
                             <label for="task-description">What do you want the AI to do?</label>
-                            <textarea id="task-description" placeholder="Describe your task clearly..." rows="3"></textarea>
+                            <textarea id="task-description" placeholder="Describe your task clearly..."
+                                rows="3"></textarea>
                         </div>
-                        
+
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="tone">Tone / Style</label>
@@ -378,7 +381,7 @@
                                     <option value="technical">Technical</option>
                                 </select>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="output-format">Output Format</label>
                                 <select id="output-format">
@@ -391,28 +394,32 @@
                                 </select>
                             </div>
                         </div>
-                        
+
                         <div class="form-group" id="input-example-group">
                             <label for="input-example">Input Example (for Few-Shot)</label>
                             <textarea id="input-example" placeholder="Provide an example input..." rows="2"></textarea>
                         </div>
-                        
+
                         <div class="form-group" id="output-example-group">
                             <label for="output-example">Output Example (for Few-Shot)</label>
-                            <textarea id="output-example" placeholder="Provide the expected output for the above input..." rows="2"></textarea>
+                            <textarea id="output-example"
+                                placeholder="Provide the expected output for the above input..." rows="2"></textarea>
                         </div>
-                        
+
                         <div class="form-group" id="role-group">
                             <label for="role">AI Role / Persona</label>
-                            <input type="text" id="role" placeholder="e.g., Expert marketing consultant, Senior developer...">
+                            <input type="text" id="role"
+                                placeholder="e.g., Expert marketing consultant, Senior developer...">
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="constraints">Additional Constraints (optional)</label>
-                            <textarea id="constraints" placeholder="Any specific requirements, things to avoid, or additional context..." rows="2"></textarea>
+                            <textarea id="constraints"
+                                placeholder="Any specific requirements, things to avoid, or additional context..."
+                                rows="2"></textarea>
                         </div>
                     </form>
-                    
+
                     <div class="wizard-nav">
                         <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
                         <button class="btn btn-primary" onclick="generatePrompt()">Generate Prompt ✨</button>
@@ -422,7 +429,7 @@
                 <!-- Step 4: Result -->
                 <div class="wizard-step" id="step-4">
                     <h3 class="wizard-title">Your Generated Prompt</h3>
-                    
+
                     <div class="result-box">
                         <div class="result-header">
                             <span class="result-technique" id="result-technique">Zero-Shot Prompt</span>
@@ -433,7 +440,7 @@
                         </div>
                         <pre class="result-prompt" id="result-prompt"></pre>
                     </div>
-                    
+
                     <div class="result-tips">
                         <h4>💡 Tips for Better Results</h4>
                         <ul id="result-tips-list">
@@ -442,9 +449,12 @@
                             <li>Iterate and refine based on outputs</li>
                         </ul>
                     </div>
-                    
+
                     <div class="wizard-nav">
                         <button class="btn btn-secondary" onclick="resetWizard()">← Start Over</button>
+                        <button class="btn btn-outline" id="optimize-btn" onclick="startAIOptimization()">
+                            <span>Optimize with AI 🧠</span>
+                        </button>
                         <button class="btn btn-primary" onclick="copyPrompt()">Copy to Clipboard</button>
                     </div>
                 </div>
@@ -457,6 +467,49 @@
         </footer>
     </div>
 
-    <script src="app.js"></script>
+    <!-- WebLLM Import Map -->
+    <script type="importmap">
+    {
+        "imports": {
+            "@mlc-ai/web-llm": "https://esm.run/@mlc-ai/web-llm"
+        }
+    }
+    </script>
+
+    <!-- Main App Logic -->
+    <script type="module" src="app.js"></script>
+
+    <!-- AI Optimization Modal -->
+    <div class="technique-detail" id="ai-modal">
+        <button class="close-btn" onclick="closeAIModal()">×</button>
+        <div class="detail-content ai-content">
+            <h3>✨ AI Prompt Assistant</h3>
+            <div id="ai-status" class="ai-status">
+                <div class="spinner"></div>
+                <p id="ai-status-text">Initializing AI Model...</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="ai-progress"></div>
+                </div>
+            </div>
+
+            <div id="ai-result" class="ai-result" style="display: none;">
+                <div class="comparison-grid">
+                    <div class="comparison-col">
+                        <h4>Original Prompt</h4>
+                        <pre id="original-prompt-display"></pre>
+                    </div>
+                    <div class="comparison-col">
+                        <h4>AI Optimized Version 🚀</h4>
+                        <pre id="optimized-prompt-display" class="typing-effect"></pre>
+                    </div>
+                </div>
+                <div class="ai-actions">
+                    <button class="btn btn-secondary" onclick="closeAIModal()">Keep Original</button>
+                    <button class="btn btn-primary" onclick="applyOptimizedPrompt()">Use Optimized ✨</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
