@@ -451,6 +451,15 @@ async function generatePrompt() {
     const data = state.formData;
     const category = state.selectedCategory;
 
+    // 0. Validation
+    if (!data.taskDescription || data.taskDescription.trim().length < 5) {
+        alert("Please provide a clearer task description (at least 5 characters) to generate a valid prompt.");
+        document.getElementById('task-description').focus();
+        document.getElementById('task-description').classList.add('error');
+        setTimeout(() => document.getElementById('task-description').classList.remove('error'), 2000);
+        return;
+    }
+
     // 1. Generate Base Prompt (Stitched)
     let rawPrompt = '';
     switch (technique) {
@@ -477,13 +486,14 @@ async function generatePrompt() {
         updateAIStatus("Refining your prompt with AI...", 90);
 
         // System Prompt
-        const systemPrompt = `You are an expert prompt engineer. Your goal is to optimize the following draft prompt.
+        const systemPrompt = `You are a precise and efficiency-focused prompt engineer. Your goal is to optimize the draft prompt into a production-ready version.
         
-        Rules:
-        1. Keep the core intent EXACTLY the same.
-        2. Improve clarity, structure, and effectiveness.
-        3. Enforce the requested tone (${data.tone}) and format (${data.outputFormat}).
-        4. Return ONLY the optimized prompt text. Do not add conversational filler.`;
+        STRICT RULES:
+        1. NO HALLUCINATIONS: Do not invent details, context, or data that is not in the draft. If context is missing, use bracketed placeholders like [Insert Specific Topic].
+        2. BE CONCISE: Remove conversational filler ("Here is the prompt"). Just output the prompt.
+        3. FORMATTING: Use Markdown variables ({{variable}}) for inputs. Use clear headers.
+        4. TONE/FORMAT: Strictly enforce the user's requested tone (${data.tone}) and format (${data.outputFormat}).
+        5. CLARITY: Ensure the prompt is "to the point" and unambiguous.`;
 
         // Generate
         const messages = [
