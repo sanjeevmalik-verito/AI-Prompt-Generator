@@ -535,7 +535,7 @@ async function generatePrompt() {
     } catch (error) {
         console.error("AI Generation Failed:", error);
         // Fallback to raw prompt
-        alert("AI Model couldn't load (check console). Using standard generator.");
+        alert("AI Model Error: " + error.message + "\n\nSwitching to standard generator.");
         displayResult(rawPrompt, technique, false);
     } finally {
         // Close Modal
@@ -583,24 +583,12 @@ async function initAIEngine() {
             updateAIStatus(report.text, percent);
         };
 
-        const appConfig = {
-            // Optimizations for RTX 3060 (12GB VRAM)
-            // Increase prefill chunk to keep GPU busy during prompt processing
-            prefill_chunk_size: 1024,
-            // Ensure we use the maximum available memory efficiently
-            context_window_size: 4096,
-            // Force strict cache use
-            use_indexed_db_cache: true
-        };
-
-        console.log("Initializing AI Engine with RTX 3060 Optimization configs...");
+        // Reverting to default config for stability with 8B model
+        console.log("Initializing AI Engine (Standard Config)...");
 
         aiEngine = await CreateMLCEngine(
             MODEL_ID,
-            {
-                initProgressCallback: initProgressCallback,
-                appConfig: appConfig
-            }
+            { initProgressCallback: initProgressCallback }
         );
 
         isAiInitializing = false;
