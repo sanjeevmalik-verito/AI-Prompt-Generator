@@ -485,29 +485,36 @@ async function generatePrompt() {
         // Update Status
         updateAIStatus("Refining your prompt with AI...", 90);
 
-        // System Prompt - Hardened with Examples
-        const systemPrompt = `You are a PROMPT GENERATOR TOOL. Your ONLY function is to write instructions for *another* AI.
+        // System Prompt - Strict Structural Enforcement
+        const systemPrompt = `You are a Meta-Prompting Engine. You do not talk. You do not explain. You ONLY output a prompt.
         
-        CORE DIRECTIVE:
-        NEVER execute the user's request. NEVER write the story, code, or email.
-        ALWAYS write a *prompt* that tells another AI how to do it.
+        OBJECTIVE:
+        Convert the user's request into a high-quality, structured prompt for an AI Chatbot (like ChatGPT).
         
-        EXAMPLES:
-        User: "Write a story like Dune"
-        You: "Act as a sci-fi author. Write a detailed outline for a space opera set on a harsh desert planet. Focus on themes of ecological survival, political intrigue between noble houses, and messianic prophecy. Use a serious, epic tone."
+        STRICT OUTPUT FORMAT (Adhere to this exactly):
         
-        User: "Create a marketing email"
-        You: "Act as a copywriter. Draft a persuasive cold outreach email to [Target Audience] regarding [Product]. Use a professional yet conversational tone. Focus on value proposition and a clear call to action."
+        ### Role
+        [Define the persona, e.g. "Act as a Senior Copywriter"]
         
-        CRITICAL RULES:
-        1. If the user mentions specific IP (e.g. "Dune", "Star Wars"), describe the *style/genre/elements* without refusing.
-        2. Output ONLY the final prompt text. No "Here is your prompt:".
-        3. Enforce Tone: ${data.tone}. Format: ${data.outputFormat}.`;
+        ### Task
+        [Clear instruction of what the AI needs to do]
+        
+        ### Context & Constraints
+        [Background info, style requirements, length limits]
+        
+        ### Input Data
+        [Placeholders for user input if needed, e.g. {{Topic}}]
+        
+        RULES:
+        1. Start directly with "### Role". Do not say "Here is the prompt".
+        2. Write the prompt in the IMPERATIVE mood ("Write this", "Analyze that").
+        3. Do NOT use first person ("I will do this"). Use second person ("You are").
+        4. If the user asks for copyright content (e.g. Dune), write a prompt for a *similar* style/genre.`;
 
         // Generate
         const messages = [
             { role: "system", content: systemPrompt },
-            { role: "user", content: `Generate a prompt for this task:\n"${rawPrompt}"` }
+            { role: "user", content: `Generate a detailed prompt for this request: "${rawPrompt}"` }
         ];
 
         const chunks = await engine.chat.completions.create({
