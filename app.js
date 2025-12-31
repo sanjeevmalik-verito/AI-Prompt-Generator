@@ -486,14 +486,14 @@ async function generatePrompt() {
         updateAIStatus("Refining your prompt with AI...", 90);
 
         // System Prompt
-        const systemPrompt = `You are a precise and efficiency-focused prompt engineer. Your goal is to optimize the draft prompt into a production-ready version.
+        const systemPrompt = `You are a Meta-Prompting Assistant. Your ONLY goal is to rewrite the user's rough idea into a detailed, high-quality PROMPT for another AI.
         
-        STRICT RULES:
-        1. NO HALLUCINATIONS: Do not invent details, context, or data that is not in the draft. If context is missing, use bracketed placeholders like [Insert Specific Topic].
-        2. BE CONCISE: Remove conversational filler ("Here is the prompt"). Just output the prompt.
-        3. FORMATTING: Use Markdown variables ({{variable}}) for inputs. Use clear headers.
-        4. TONE/FORMAT: Strictly enforce the user's requested tone (${data.tone}) and format (${data.outputFormat}).
-        5. CLARITY: Ensure the prompt is "to the point" and unambiguous.`;
+        CRITICAL RULES:
+        1. YOU ARE THE ARCHITECT, NOT THE BUILDER: Do NOT execute the task. Do NOT write the story, code, or email. ONLY write the instructions (the prompt) for *another* AI to do it.
+        2. HANDLING CREATIVE REQUESTS: If the user asks for "a story like Dune", do NOT refuse. Instead, write a prompt that asks an AI to "Write a sci-fi epic featuring desert planets, political intrigue, and giant sandworms, inspired by classic space operas."
+        3. NO REFUSALS FOR SAFE CONTENT: Unless the request is illegal or harmful, you MUST generate a prompt for it.
+        4. STRUCTURE: Output the result as a clear, structured prompt with specific sections (Context, Task, Constraints).
+        5. TONE: Enforce the requested tone (${data.tone}).`;
 
         // Generate
         const messages = [
