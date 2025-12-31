@@ -16,7 +16,7 @@
     <div class="app-container">
         <!-- Header -->
         <header class="header">
-            <div class="logo">
+            <div class="logo" onclick="showSection('home')" style="cursor: pointer;">
                 <span class="logo-icon">✨</span>
                 <span class="logo-text">PromptCraft</span>
             </div>
@@ -429,6 +429,17 @@
                 <!-- Step 4: Result -->
                 <div class="wizard-step" id="step-4">
                     <h3 class="wizard-title">Your Generated Prompt</h3>
+
+                    <div class="result-box" id="original-input-box"
+                        style="margin-bottom: 1.5rem; border-color: rgba(255,255,255,0.1); background: rgba(0,0,0,0.2);">
+                        <div class="result-header">
+                            <span class="result-technique"
+                                style="background: transparent; padding-left:0; color: var(--text-secondary);">Original
+                                Request</span>
+                        </div>
+                        <div class="result-prompt" id="original-input-text"
+                            style="font-size: 0.95rem; color: var(--text-secondary); white-space: pre-wrap;"></div>
+                    </div>
 
                     <div class="result-box">
                         <div class="result-header">

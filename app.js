@@ -547,6 +547,10 @@ function displayResult(promptText, techniqueId, isAiOptimized) {
     // Update Result Text
     document.getElementById('result-prompt').textContent = promptText;
 
+    // Update Original Input Display
+    const originalInput = state.formData.taskDescription || "No input provided";
+    document.getElementById('original-input-text').textContent = originalInput;
+
     // Update Label
     const label = techniques[techniqueId].name + (isAiOptimized ? ' (AI Optimized ✨)' : '');
     document.getElementById('result-technique').textContent = label;
