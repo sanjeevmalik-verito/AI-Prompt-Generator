@@ -583,9 +583,24 @@ async function initAIEngine() {
             updateAIStatus(report.text, percent);
         };
 
+        const appConfig = {
+            // Optimizations for RTX 3060 (12GB VRAM)
+            // Increase prefill chunk to keep GPU busy during prompt processing
+            prefill_chunk_size: 1024,
+            // Ensure we use the maximum available memory efficiently
+            context_window_size: 4096,
+            // Force strict cache use
+            use_indexed_db_cache: true
+        };
+
+        console.log("Initializing AI Engine with RTX 3060 Optimization configs...");
+
         aiEngine = await CreateMLCEngine(
             MODEL_ID,
-            { initProgressCallback: initProgressCallback }
+            {
+                initProgressCallback: initProgressCallback,
+                appConfig: appConfig
+            }
         );
 
         isAiInitializing = false;
