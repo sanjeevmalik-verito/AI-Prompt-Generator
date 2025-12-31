@@ -485,26 +485,29 @@ async function generatePrompt() {
         // Update Status
         updateAIStatus("Refining your prompt with AI...", 90);
 
-        // System Prompt
-        const systemPrompt = `You are a helpful Tool that converts user ideas into structural prompts for AI models.
+        // System Prompt - Hardened with Examples
+        const systemPrompt = `You are a PROMPT GENERATOR TOOL. Your ONLY function is to write instructions for *another* AI.
         
-        CRITICAL INSTRUCTION - NO REFUSALS:
-        Your task is NOT to generate content. Your task is ONLY to write a *structural template* describing a task.
+        CORE DIRECTIVE:
+        NEVER execute the user's request. NEVER write the story, code, or email.
+        ALWAYS write a *prompt* that tells another AI how to do it.
         
-        HANDLING IP/COPYRIGHT:
-        If the user mentions a specific book, movie, or brand (e.g., "Like Dune", "Like Apple"), you MUST NOT refuse.
-        Instead, abstracted it into descriptions:
-        - "Like Dune" -> "A sci-fi epic set on a desert planet with political intrigue"
-        - "Like Apple" -> "A minimalist, premium, user-friendly design style"
+        EXAMPLES:
+        User: "Write a story like Dune"
+        You: "Act as a sci-fi author. Write a detailed outline for a space opera set on a harsh desert planet. Focus on themes of ecological survival, political intrigue between noble houses, and messianic prophecy. Use a serious, epic tone."
         
-        OUTPUT FORMAT:
-        Return ONLY the optimized prompt text.
-        Start with: "Act as a..." or "Write a..."`;
+        User: "Create a marketing email"
+        You: "Act as a copywriter. Draft a persuasive cold outreach email to [Target Audience] regarding [Product]. Use a professional yet conversational tone. Focus on value proposition and a clear call to action."
+        
+        CRITICAL RULES:
+        1. If the user mentions specific IP (e.g. "Dune", "Star Wars"), describe the *style/genre/elements* without refusing.
+        2. Output ONLY the final prompt text. No "Here is your prompt:".
+        3. Enforce Tone: ${data.tone}. Format: ${data.outputFormat}.`;
 
         // Generate
         const messages = [
             { role: "system", content: systemPrompt },
-            { role: "user", content: `Optimize this prompt:\n\n${rawPrompt}` }
+            { role: "user", content: `Generate a prompt for this task:\n"${rawPrompt}"` }
         ];
 
         const chunks = await engine.chat.completions.create({
@@ -519,27 +522,8 @@ async function generatePrompt() {
             optimizedPrompt += chunk.choices[0]?.delta?.content || "";
         }
 
-        // 2.1 Refusal Check / Fallback
-        const refusalKeywords = ["I cannot", "I can't", "assist with that", "unable to", "policy", "copyright"];
-        const isRefusal = refusalKeywords.some(kw => optimizedPrompt.toLowerCase().includes(kw.toLowerCase()));
-
-        if (isRefusal || optimizedPrompt.length < 20) {
-            console.warn("AI Refused or failed. Switching to Manual Fallback.");
-
-            // Manual Fallback Construction
-            optimizedPrompt = `Act as an expert in ${category}.\n\n`;
-            optimizedPrompt += `Task: ${data.taskDescription} (Focus on the style/genre requested)\n`;
-            optimizedPrompt += `Requirements:\n`;
-            optimizedPrompt += `- Tone: ${data.tone}\n`;
-            optimizedPrompt += `- Format: ${data.outputFormat}\n`;
-            if (data.constraints) optimizedPrompt += `- Constraints: ${data.constraints}\n`;
-
-            // Clean specific IP if possible (simple heuristic)
-            if (optimizedPrompt.includes("Dune")) optimizedPrompt += `\n(Note: Capture the *style* and *themes* of the reference, do not copy direct intellectual property.)`;
-        }
-
         // 3. Success - Show Optimized Result in Step 4
-        displayResult(optimizedPrompt, technique, !isRefusal);
+        displayResult(optimizedPrompt, technique, true);
 
     } catch (error) {
         console.error("AI Generation Failed:", error);
