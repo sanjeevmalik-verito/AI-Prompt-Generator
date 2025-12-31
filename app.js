@@ -486,14 +486,20 @@ async function generatePrompt() {
         updateAIStatus("Refining your prompt with AI...", 90);
 
         // System Prompt
-        const systemPrompt = `You are a Meta-Prompting Assistant. Your ONLY goal is to rewrite the user's rough idea into a detailed, high-quality PROMPT for another AI.
+        const systemPrompt = `You are a helpful Tool that converts user ideas into structural prompts for AI models.
         
-        CRITICAL RULES:
-        1. YOU ARE THE ARCHITECT, NOT THE BUILDER: Do NOT execute the task. Do NOT write the story, code, or email. ONLY write the instructions (the prompt) for *another* AI to do it.
-        2. HANDLING CREATIVE REQUESTS: If the user asks for "a story like Dune", do NOT refuse. Instead, write a prompt that asks an AI to "Write a sci-fi epic featuring desert planets, political intrigue, and giant sandworms, inspired by classic space operas."
-        3. NO REFUSALS FOR SAFE CONTENT: Unless the request is illegal or harmful, you MUST generate a prompt for it.
-        4. STRUCTURE: Output the result as a clear, structured prompt with specific sections (Context, Task, Constraints).
-        5. TONE: Enforce the requested tone (${data.tone}).`;
+        CRITICAL INSTRUCTION - NO REFUSALS:
+        Your task is NOT to generate content. Your task is ONLY to write a *structural template* describing a task.
+        
+        HANDLING IP/COPYRIGHT:
+        If the user mentions a specific book, movie, or brand (e.g., "Like Dune", "Like Apple"), you MUST NOT refuse.
+        Instead, abstracted it into descriptions:
+        - "Like Dune" -> "A sci-fi epic set on a desert planet with political intrigue"
+        - "Like Apple" -> "A minimalist, premium, user-friendly design style"
+        
+        OUTPUT FORMAT:
+        Return ONLY the optimized prompt text.
+        Start with: "Act as a..." or "Write a..."`;
 
         // Generate
         const messages = [
@@ -508,14 +514,32 @@ async function generatePrompt() {
 
         let optimizedPrompt = "";
 
-        // We will just accumulate the result here, maybe show it streaming in the modal if we want?
-        // For now, let's just wait for full generation or stream it to a hidden buffer
+        // We will just accumulate the result here
         for await (const chunk of chunks) {
             optimizedPrompt += chunk.choices[0]?.delta?.content || "";
         }
 
+        // 2.1 Refusal Check / Fallback
+        const refusalKeywords = ["I cannot", "I can't", "assist with that", "unable to", "policy", "copyright"];
+        const isRefusal = refusalKeywords.some(kw => optimizedPrompt.toLowerCase().includes(kw.toLowerCase()));
+
+        if (isRefusal || optimizedPrompt.length < 20) {
+            console.warn("AI Refused or failed. Switching to Manual Fallback.");
+
+            // Manual Fallback Construction
+            optimizedPrompt = `Act as an expert in ${category}.\n\n`;
+            optimizedPrompt += `Task: ${data.taskDescription} (Focus on the style/genre requested)\n`;
+            optimizedPrompt += `Requirements:\n`;
+            optimizedPrompt += `- Tone: ${data.tone}\n`;
+            optimizedPrompt += `- Format: ${data.outputFormat}\n`;
+            if (data.constraints) optimizedPrompt += `- Constraints: ${data.constraints}\n`;
+
+            // Clean specific IP if possible (simple heuristic)
+            if (optimizedPrompt.includes("Dune")) optimizedPrompt += `\n(Note: Capture the *style* and *themes* of the reference, do not copy direct intellectual property.)`;
+        }
+
         // 3. Success - Show Optimized Result in Step 4
-        displayResult(optimizedPrompt, technique, true);
+        displayResult(optimizedPrompt, technique, !isRefusal);
 
     } catch (error) {
         console.error("AI Generation Failed:", error);
