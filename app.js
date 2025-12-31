@@ -428,6 +428,10 @@ function resetWizard() {
 // Prompt Generation
 // ========================================
 
+// ========================================
+// Prompt Generation & AI Logic
+// ========================================
+
 function collectFormData() {
     state.formData = {
         taskDescription: document.getElementById('task-description').value,
@@ -440,42 +444,91 @@ function collectFormData() {
     };
 }
 
-function generatePrompt() {
+async function generatePrompt() {
     collectFormData();
 
     const technique = state.selectedTechnique;
     const data = state.formData;
     const category = state.selectedCategory;
 
-    let prompt = '';
-
+    // 1. Generate Base Prompt (Stitched)
+    let rawPrompt = '';
     switch (technique) {
-        case 'zero-shot':
-            prompt = generateZeroShotPrompt(data, category);
-            break;
-        case 'few-shot':
-            prompt = generateFewShotPrompt(data, category);
-            break;
-        case 'chain-of-thought':
-            prompt = generateChainOfThoughtPrompt(data, category);
-            break;
-        case 'role-based':
-            prompt = generateRoleBasedPrompt(data, category);
-            break;
-        case 'template-based':
-            prompt = generateTemplateBasedPrompt(data, category);
-            break;
-        default:
-            prompt = generateZeroShotPrompt(data, category);
+        case 'zero-shot': rawPrompt = generateZeroShotPrompt(data, category); break;
+        case 'few-shot': rawPrompt = generateFewShotPrompt(data, category); break;
+        case 'chain-of-thought': rawPrompt = generateChainOfThoughtPrompt(data, category); break;
+        case 'role-based': rawPrompt = generateRoleBasedPrompt(data, category); break;
+        case 'template-based': rawPrompt = generateTemplateBasedPrompt(data, category); break;
+        default: rawPrompt = generateZeroShotPrompt(data, category);
     }
 
-    // Display result
-    document.getElementById('result-prompt').textContent = prompt;
-    document.getElementById('result-technique').textContent = techniques[technique].name;
+    // 2. AI Optimization Step
+    try {
+        // Show AI Modal for progress
+        const modal = document.getElementById('ai-modal');
+        modal.classList.add('active');
+        document.getElementById('ai-status').style.display = 'flex';
+        document.getElementById('ai-result').style.display = 'none'; // Hide result comparison key
+
+        // Initialize Engine
+        const engine = await initAIEngine();
+
+        // Update Status
+        updateAIStatus("Refining your prompt with AI...", 90);
+
+        // System Prompt
+        const systemPrompt = `You are an expert prompt engineer. Your goal is to optimize the following draft prompt.
+        
+        Rules:
+        1. Keep the core intent EXACTLY the same.
+        2. Improve clarity, structure, and effectiveness.
+        3. Enforce the requested tone (${data.tone}) and format (${data.outputFormat}).
+        4. Return ONLY the optimized prompt text. Do not add conversational filler.`;
+
+        // Generate
+        const messages = [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: `Optimize this prompt:\n\n${rawPrompt}` }
+        ];
+
+        const chunks = await engine.chat.completions.create({
+            messages,
+            stream: true,
+        });
+
+        let optimizedPrompt = "";
+
+        // We will just accumulate the result here, maybe show it streaming in the modal if we want?
+        // For now, let's just wait for full generation or stream it to a hidden buffer
+        for await (const chunk of chunks) {
+            optimizedPrompt += chunk.choices[0]?.delta?.content || "";
+        }
+
+        // 3. Success - Show Optimized Result in Step 4
+        displayResult(optimizedPrompt, technique, true);
+
+    } catch (error) {
+        console.error("AI Generation Failed:", error);
+        // Fallback to raw prompt
+        alert("AI Model couldn't load (check console). Using standard generator.");
+        displayResult(rawPrompt, technique, false);
+    } finally {
+        // Close Modal
+        document.getElementById('ai-modal').classList.remove('active');
+    }
+}
+
+function displayResult(promptText, techniqueId, isAiOptimized) {
+    // Update Result Text
+    document.getElementById('result-prompt').textContent = promptText;
+
+    // Update Label
+    const label = techniques[techniqueId].name + (isAiOptimized ? ' (AI Optimized ✨)' : '');
+    document.getElementById('result-technique').textContent = label;
 
     // Update tips
     const tipsList = document.getElementById('result-tips-list');
-    tipsList.innerHTML = techniques[technique].tips
+    tipsList.innerHTML = techniques[techniqueId].tips
         .map(tip => `<li>${tip}</li>`)
         .join('');
 
@@ -483,6 +536,54 @@ function generatePrompt() {
     state.currentStep = 4;
     updateWizardStep();
 }
+
+
+// --- AI Engine Logic ---
+
+let aiEngine = null;
+let isAiInitializing = false;
+const MODEL_ID = "Llama-3.2-1B-Instruct-q4f16_1-MLC";
+
+async function initAIEngine() {
+    if (aiEngine) return aiEngine;
+
+    isAiInitializing = true;
+    updateAIStatus("Downloading AI model (first time only)...", 10);
+
+    try {
+        const initProgressCallback = (report) => {
+            console.log(report.text);
+            const progress = report.progress || 0;
+            const percent = 10 + (progress * 90);
+            updateAIStatus(report.text, percent);
+        };
+
+        aiEngine = await CreateMLCEngine(
+            MODEL_ID,
+            { initProgressCallback: initProgressCallback }
+        );
+
+        isAiInitializing = false;
+        return aiEngine;
+    } catch (error) {
+        console.error("AI Init Error:", error);
+        isAiInitializing = false;
+        throw error;
+    }
+}
+
+function updateAIStatus(text, percent) {
+    const statusText = document.getElementById('ai-status-text');
+    const progressBar = document.getElementById('ai-progress');
+
+    if (statusText) statusText.textContent = text;
+    if (progressBar) progressBar.style.width = `${percent}%`;
+}
+
+function closeAIModal() {
+    document.getElementById('ai-modal').classList.remove('active');
+}
+
 
 function generateZeroShotPrompt(data, category) {
     let prompt = '';
@@ -653,123 +754,7 @@ function copyPrompt() {
     });
 }
 
-// ========================================
-// AI Optimization Logic (WebLLM)
-// ========================================
 
-let aiEngine = null;
-let isAiInitializing = false;
-const MODEL_ID = "Llama-3.2-1B-Instruct-q4f16_1-MLC";
-
-async function initAIEngine() {
-    if (aiEngine) return aiEngine;
-
-    isAiInitializing = true;
-    updateAIStatus("Downloading AI model (may take a moment)...", 10);
-
-    try {
-        const initProgressCallback = (report) => {
-            console.log(report.text);
-            const progress = report.progress || 0;
-            // Map 0-1 to 10-100%
-            const percent = 10 + (progress * 90);
-            updateAIStatus(report.text, percent);
-        };
-
-        aiEngine = await CreateMLCEngine(
-            MODEL_ID,
-            { initProgressCallback: initProgressCallback }
-        );
-
-        isAiInitializing = false;
-        return aiEngine;
-    } catch (error) {
-        console.error("AI Init Error:", error);
-        updateAIStatus("Error loading AI model. Please check constraints.", 0);
-        isAiInitializing = false;
-        throw error;
-    }
-}
-
-function updateAIStatus(text, percent) {
-    const statusText = document.getElementById('ai-status-text');
-    const progressBar = document.getElementById('ai-progress');
-
-    if (statusText) statusText.textContent = text;
-    if (progressBar) progressBar.style.width = `${percent}%`;
-}
-
-async function startAIOptimization() {
-    const originalPrompt = document.getElementById('result-prompt').textContent;
-    if (!originalPrompt) return;
-
-    // Show Modal
-    const modal = document.getElementById('ai-modal');
-    modal.classList.add('active');
-
-    // Reset Views
-    document.getElementById('ai-status').style.display = 'flex';
-    document.getElementById('ai-result').style.display = 'none';
-    document.getElementById('original-prompt-display').textContent = originalPrompt;
-    document.getElementById('optimized-prompt-display').textContent = '';
-
-    try {
-        // Initialize Engine
-        const engine = await initAIEngine();
-
-        // Hide loading, show comparison
-        document.getElementById('ai-status').style.display = 'none';
-        document.getElementById('ai-result').style.display = 'block';
-
-        // Construct System Prompt
-        const systemPrompt = `You are an expert prompt engineer. Your goal is to optimize the following prompt to be more clarity, explicit, and effective.
-        
-        Rules:
-        1. Keep the core intent exactly the same.
-        2. Improve structure and clarity.
-        3. Add specific constraints if they help.
-        4. Return ONLY the improved prompt text. Do not add explanations.`;
-
-        // Generate
-        const messages = [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: `Optimize this prompt:\n\n${originalPrompt}` }
-        ];
-
-        const chunks = await engine.chat.completions.create({
-            messages,
-            stream: true,
-        });
-
-        let fullResponse = "";
-        const resultDisplay = document.getElementById('optimized-prompt-display');
-
-        for await (const chunk of chunks) {
-            const content = chunk.choices[0]?.delta?.content || "";
-            fullResponse += content;
-            resultDisplay.textContent = fullResponse;
-            // Auto-scroll
-            resultDisplay.scrollTop = resultDisplay.scrollHeight;
-        }
-
-    } catch (error) {
-        alert("Failed to run AI Optimization: " + error.message);
-        closeAIModal();
-    }
-}
-
-function closeAIModal() {
-    document.getElementById('ai-modal').classList.remove('active');
-}
-
-function applyOptimizedPrompt() {
-    const optimizedText = document.getElementById('optimized-prompt-display').textContent;
-    if (optimizedText) {
-        document.getElementById('result-prompt').textContent = optimizedText;
-        document.getElementById('result-technique').textContent += " (AI Optimized ✨)";
-        closeAIModal();
-    }
-}
 
 // ========================================
 // Event Listeners
@@ -832,6 +817,4 @@ window.prevStep = prevStep;
 window.resetWizard = resetWizard;
 window.generatePrompt = generatePrompt;
 window.copyPrompt = copyPrompt;
-window.startAIOptimization = startAIOptimization;
 window.closeAIModal = closeAIModal;
-window.applyOptimizedPrompt = applyOptimizedPrompt;
